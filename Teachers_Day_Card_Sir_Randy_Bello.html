@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Teacher's Day - Sir Randy Bello</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7d794,#f5cd79,#e8b86d);overflow:hidden}
+body::before,body::after{content:"✦";position:fixed;font-size:80px;color:rgba(255,255,255,.25)}
+body::before{top:8%;left:10%}.body::after{bottom:8%;right:10%}
+.container{text-align:center}
+.book{width:760px;height:500px;position:relative;perspective:2000px;margin-bottom:25px}
+.page{position:absolute;width:50%;height:100%;right:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.4s cubic-bezier(.65,.05,.36,1);z-index:5}
+.page.flipped{transform:rotateY(-180deg)}
+.page-front,.page-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:0 15px 15px 0;box-shadow:5px 8px 25px rgba(0,0,0,.25);padding:35px}
+.page-front{background:#fffaf0}.page-back{background:#fff8e7;transform:rotateY(180deg)}
+.left-page{position:absolute;width:50%;height:100%;left:0;background:#fffaf0;border-radius:15px 0 0 15px;padding:35px;box-shadow:-5px 8px 25px rgba(0,0,0,.25)}
+.book::after{content:"";position:absolute;width:4px;height:100%;background:#d8b36a;left:50%;top:0;z-index:10}
+.cover-title{font-size:30px;color:#9a681f;margin-top:30px}.cover-icon{font-size:70px;margin:30px 0 20px}
+.teacher-name{font-size:28px;font-weight:bold;color:#704214}
+.photo{width:190px;height:190px;object-fit:cover;border-radius:50%;border:6px solid #d8a84e;margin:15px auto;display:block}
+.message{margin-top:20px;color:#49351f;font-size:17px;line-height:1.7;text-align:left;white-space:pre-line}
+.signature{margin-top:25px;font-weight:bold;color:#8a5a20}
+.back-title{color:#9a681f;font-size:25px;margin-bottom:20px}
+textarea{width:100%;height:180px;resize:none;border:2px solid #d9b56c;border-radius:12px;padding:15px;font-family:inherit;font-size:15px;outline:none;background:#fffdf7}
+textarea:focus{border-color:#a8792d}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:760px}
+button,.upload-label{border:none;padding:12px 18px;border-radius:25px;background:#8d6024;color:white;cursor:pointer;font-size:14px;transition:.3s}
+button:hover,.upload-label:hover{background:#654217;transform:translateY(-2px)}
+input[type=file]{display:none}
+@media(max-width:800px){.book{width:94vw;height:440px}.page-front,.page-back,.left-page{padding:20px}.cover-title{font-size:21px}.teacher-name{font-size:21px}.photo{width:130px;height:130px}.message{font-size:13px}.controls{max-width:95vw}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="book">
+<div class="left-page">
+<div class="cover-icon">📚</div>
+<h1 class="cover-title">Happy Teacher's Day!</h1><br>
+<p style="color:#76552b">A special message for</p>
+<h2 class="teacher-name">Sir Randy Bello</h2><br>
+<p style="color:#76552b">Thank you for being an inspiring teacher.</p>
+<p style="font-size:35px;margin-top:20px">🍎 ✏️ 📖</p>
+</div>
+
+<div class="page" id="page">
+<div class="page-front">
+<img id="teacherPhoto" class="photo" src="https://via.placeholder.com/300x300.png?text=Sir+Randy" alt="Teacher Photo">
+<h2 class="teacher-name">Sir Randy Bello</h2>
+<p class="message" id="displayMessage">Dear Sir Randy,
+
+Thank you for your patience, guidance, and dedication in teaching us.
+
+Your lessons are not only about academics, but also about becoming better and more responsible individuals.
+
+We truly appreciate all the effort, encouragement, and knowledge you share with us.
+
+Happy Teacher's Day, Sir Randy!</p>
+<p class="signature">With gratitude and respect ❤️</p>
+</div>
+
+<div class="page-back">
+<h2 class="back-title">💌 A Message for Sir Randy</h2>
+<textarea id="messageInput">Dear Sir Randy,
+
+Thank you for your patience, guidance, and dedication in teaching us.
+
+We truly appreciate everything you do for your students.
+
+Happy Teacher's Day, Sir Randy! ❤️</textarea>
+<br><br>
+<button onclick="updateMessage()">✨ Update Message</button>
+</div>
+</div>
+</div>
+
+<div class="controls">
+<button onclick="openCard()">📖 Open Card</button>
+<button onclick="closeCard()">📕 Close Card</button>
+<label class="upload-label">🖼️ Add Photo<input type="file" id="photoUpload" accept="image/*"></label>
+<label class="upload-label">🎵 Add Audio<input type="file" id="audioUpload" accept="audio/*"></label>
+<button onclick="playAudio()">▶️ Play Audio</button>
+<button onclick="stopAudio()">⏹️ Stop Audio</button>
+</div>
+<audio id="teacherAudio"></audio>
+</div>
+
+<script>
+const page=document.getElementById("page");
+const messageInput=document.getElementById("messageInput");
+const displayMessage=document.getElementById("displayMessage");
+const photoUpload=document.getElementById("photoUpload");
+const teacherPhoto=document.getElementById("teacherPhoto");
+const audioUpload=document.getElementById("audioUpload");
+const teacherAudio=document.getElementById("teacherAudio");
+
+function openCard(){page.classList.add("flipped")}
+function closeCard(){page.classList.remove("flipped")}
+function updateMessage(){displayMessage.innerText=messageInput.value;page.classList.remove("flipped")}
+
+photoUpload.addEventListener("change",e=>{
+ const file=e.target.files[0];
+ if(file) teacherPhoto.src=URL.createObjectURL(file);
+});
+
+audioUpload.addEventListener("change",e=>{
+ const file=e.target.files[0];
+ if(file){teacherAudio.src=URL.createObjectURL(file);alert("Audio added successfully! 🎵")}
+});
+
+function playAudio(){
+ if(!teacherAudio.src){alert("Please add an audio file first.");return}
+ teacherAudio.play();
+}
+function stopAudio(){teacherAudio.pause();teacherAudio.currentTime=0}
+</script>
+</body>
+</html>
